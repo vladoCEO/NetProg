@@ -13,7 +13,7 @@ int main() {
     sockaddr_in *srv_addr = new sockaddr_in{};
     srv_addr->sin_family = AF_INET;
     srv_addr->sin_port = htons(7);
-    srv_addr->sin_addr.s_addr = inet_addr("172.16.40.13");
+    srv_addr->sin_addr.s_addr = inet_addr("172.16.40.1");
 
     // 2. Создаём TCP-сокет
     int s = socket(AF_INET, SOCK_STREAM, 0);
