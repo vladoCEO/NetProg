@@ -42,22 +42,19 @@ int main() {
     }
 
     // 5. Задаём адрес удалённого узла для UDP-сокета
-    rc = connect(s, (const sockaddr*)srv_addr,
-                 sizeof(sockaddr_in));
+    rc = sendto(s,"", 0, 0,
+    			(const sockaddr*)srv_addr, sizeof(sockaddr_in));
 
     if (rc == -1) {
-        std::cerr << "Ошибка connect()\n";
+        std::cerr << "Ошибка sendto()\n";
         close(s);
         delete self_addr;
         delete srv_addr;
         return 1;
     }
 
-    // 6. Отправляем пустой запрос службе Daytime
-    rc = send(s, "", 0, 0);
-
     if (rc == -1) {
-        std::cerr << "Ошибка send()\n";
+        std::cerr << "Ошибка sendto()\n";
         close(s);
         delete self_addr;
         delete srv_addr;
@@ -67,10 +64,13 @@ int main() {
     // 7. Получаем ответ сервера
     char buffer[257];
 
-    rc = recv(s, buffer, sizeof(buffer) - 1, 0);
+	sockaddr_in from_addr{};
+	socklen_t from_len = sizeof(from_addr);
+    rc = recvfrom(s, buffer, sizeof(buffer) - 1, 0,
+    				(sockaddr*)&from_addr, &from_len);
 
     if (rc == -1) {
-        std::cerr << "Ошибка recv()\n";
+        std::cerr << "Ошибка recvfrom()\n";
         close(s);
         delete self_addr;
         delete srv_addr;
